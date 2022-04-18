@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		5C103CA7236041E7000AD3DA /* RCTJPushEventQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C103CA6236041E7000AD3DA /* RCTJPushEventQueue.m */; };
 		624386D81E096B8800F69E07 /* RCTJPushModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 624386D41E096B8800F69E07 /* RCTJPushModule.m */; };
-		89BBFC04252337EE00CE46E5 /* libjpush-ios-3.3.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89BBFC03252337EE00CE46E5 /* libjpush-ios-3.3.6.a */; };
+		89BCC6EF280C606F00CE910D /* libjpush-ios-4.6.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89BCC6EE280C606E00CE910D /* libjpush-ios-4.6.0.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +31,7 @@
 		624386D41E096B8800F69E07 /* RCTJPushModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTJPushModule.m; sourceTree = "<group>"; };
 		6280980A1CEDC407000D3A81 /* libRCTJPushModule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTJPushModule.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DA93BC21E8679300208462 /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
-		89BBFC03252337EE00CE46E5 /* libjpush-ios-3.3.6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjpush-ios-3.3.6.a"; path = "RCTJPushModule/libjpush-ios-3.3.6.a"; sourceTree = "<group>"; };
+		89BCC6EE280C606E00CE910D /* libjpush-ios-4.6.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjpush-ios-4.6.0.a"; path = "RCTJPushModule/libjpush-ios-4.6.0.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89BBFC04252337EE00CE46E5 /* libjpush-ios-3.3.6.a in Frameworks */,
+				89BCC6EF280C606F00CE910D /* libjpush-ios-4.6.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +49,7 @@
 		5CF8E647231E3A9200B12200 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				89BBFC03252337EE00CE46E5 /* libjpush-ios-3.3.6.a */,
+				89BCC6EE280C606E00CE910D /* libjpush-ios-4.6.0.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

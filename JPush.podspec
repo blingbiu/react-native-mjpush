@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source          = { :git => "https://github.com/bashen1/react-native-mjpush.git", :tag => "#{s.version}" }
   s.source_files    = 'ios/RCTJPushModule/*.{h,m}'
   s.preserve_paths  = "*.js"
-  s.frameworks      = 'UIKit','CFNetwork','CoreFoundation','CoreTelephony','SystemConfiguration','CoreGraphics','Foundation','Security','StoreKit'
+  s.frameworks      = 'UIKit','CFNetwork','CoreFoundation','CoreTelephony','SystemConfiguration','CoreGraphics','Foundation','Security'
   s.weak_frameworks = 'UserNotifications'
   s.libraries       = 'z','resolv'
   s.vendored_libraries = "ios/RCTJPushModule/*.a"
