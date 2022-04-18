@@ -6,7 +6,7 @@
   "types": "index.d.ts",
   "license": "ISC",
   "author": "bashen1",
-  "version": "2.9.0",
+  "version": "3.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/bashen1/react-native-mjpush"
