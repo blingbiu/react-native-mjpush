@@ -1,30 +1,44 @@
 # React-Native-mJpush
 
-## 此项目基于https://github.com/jpush/jpush-react-native
+[![npm version](https://badge.fury.io/js/react-native-mjpush.svg)](https://badge.fury.io/js/react-native-mjpush)
+
+iOS Version: 4.8.1
+
+Android Version: 4.9.0
+
+## 此项目基于[https://github.com/jpush/jpush-react-native](https://github.com/jpush/jpush-react-native)
 
 ## ChangeLog
 
 1. 从RN-JPush2.7.5开始，重新支持TypeScript
 2. 由于RN-JCore1.6.0存在编译问题，从RN-JCore1.7.0开始，还是需要在AndroidManifest.xml中添加配置代码，具体参考 配置-2.1 Android
 
-
 ## 1. 安装
 
-```
+```sh
 npm install react-native-mjpush --save
 ```
 
 * 注意：如果项目里没有react-native-mjcore，需要安装
 
-  ```
+  ```sh
   npm install react-native-mjcore --save
   ```
+
 安装完成后连接原生库
-进入到根目录执行<br/>
-react-native link<br/>
-或<br/>
-react-native link react-native-mjpush<br/>
+
+进入到根目录执行
+
+```sh
+react-native link
+```
+
+或
+
+```sh
+react-native link react-native-mjpush
 react-native link react-native-mjcore
+```
 
 ## 2. 配置
 
@@ -32,7 +46,7 @@ react-native link react-native-mjcore
 
 * build.gradle
 
-  ```
+  ```gradle
   android {
         defaultConfig {
             applicationId "yourApplicationId"           //在此替换你的应用包名
@@ -45,7 +59,7 @@ react-native link react-native-mjcore
     }
   ```
 
-  ```
+  ```gradle
   dependencies {
         ...
         implementation project(':react-native-mjpush')  // 添加 jpush 依赖
@@ -55,7 +69,7 @@ react-native link react-native-mjcore
 
 * setting.gradle
 
-  ```
+  ```gradle
   include ':react-native-mjpush'
   project(':react-native-mjpush').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mjpush/android')
   include ':react-native-mjcore'
@@ -64,27 +78,28 @@ react-native link react-native-mjcore
 
 * AndroidManifest.xml
 
-  ```
+  ```xml
   <meta-data
-  	android:name="JPUSH_CHANNEL"
-  	android:value="${JPUSH_CHANNEL}" />
+    android:name="JPUSH_CHANNEL"
+    android:value="${JPUSH_CHANNEL}" />
   <meta-data
-  	android:name="JPUSH_APPKEY"
-  	android:value="${JPUSH_APPKEY}" />    
+    android:name="JPUSH_APPKEY"
+    android:value="${JPUSH_APPKEY}" />    
   ```
 
 ### 2.2 iOS
+
 注意：您需要打开ios目录下的.xcworkspace文件修改您的包名
 
 ### 2.2.1 pod
 
-```
+```sh
 pod install
 ```
 
 * 注意：如果项目里使用pod安装过，请先执行命令
 
-  ```
+  ```sh
   pod deintegrate
   ```
 
@@ -92,7 +107,7 @@ pod install
 
 * Libraries
 
-  ```
+  ```txt
   Add Files to "your project name"
   node_modules/react-native-mjcore/ios/RCTJCoreModule.xcodeproj
   node_modules/react-native-mjpush/ios/RCTJPushModule.xcodeproj
@@ -100,13 +115,13 @@ pod install
 
 * Capabilities
 
-  ```
+  ```txt
   Push Notification --- ON
   ```
 
 * Build Settings
 
-  ```
+  ```txt
   All --- Search Paths --- Header Search Paths --- +
   $(SRCROOT)/../node_modules/react-native-mjcore/ios/RCTJCoreModule/
   $(SRCROOT)/../node_modules/react-native-mjpush/ios/RCTJPushModule/
@@ -114,7 +129,7 @@ pod install
 
 * Build Phases
 
-  ```
+  ```txt
   libz.tbd
   libresolv.tbd
   UserNotifications.framework
@@ -145,6 +160,3 @@ pod install
 * 集成前务必将example工程跑通
 * 如有紧急需求请前往[极光社区](https://community.jiguang.cn/c/question)
 * 上报问题还麻烦先调用JPush.setLoggerEnable(true}，拿到debug日志
-
- 
-
