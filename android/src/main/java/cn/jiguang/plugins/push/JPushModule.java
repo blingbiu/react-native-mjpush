@@ -1,10 +1,14 @@
 
 package cn.jiguang.plugins.push;
-
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -14,12 +18,15 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.lang.*;
 
 import cn.jiguang.plugins.push.common.JConstants;
 import cn.jiguang.plugins.push.common.JLogger;
@@ -28,6 +35,7 @@ import cn.jiguang.plugins.push.receiver.JPushBroadcastReceiver;
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.NotificationMessage;
+import cn.jpush.android.data.JPushCollectControl;
 import cn.jpush.android.data.JPushLocalNotification;
 
 public class JPushModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
@@ -103,7 +111,87 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
             JPushInterface.setChannel(reactContext, channel);
         }
     }
+    @ReactMethod
+    public void setChannelAndSound(ReadableMap readableMap) {
+        if (readableMap == null) {
+            JLogger.w(JConstants.PARAMS_NULL);
+            return;
+        }
+        String channel = readableMap.getString(JConstants.CHANNEL);
+        String sound = readableMap.getString(JConstants.SOUND);
+        String channelId = readableMap.getString(JConstants.CHANNELID);
+        try {
+            NotificationManager manager= (NotificationManager) reactContext.getSystemService("notification");
+            if(Build.VERSION.SDK_INT<26){
+                return;
+            }
+            if(TextUtils.isEmpty(channel)||TextUtils.isEmpty(channelId)){
+                return;
+            }
+            NotificationChannel channel1=new NotificationChannel(channelId,channel, NotificationManager.IMPORTANCE_HIGH);
+            if(!TextUtils.isEmpty(sound)){
+                channel1.setSound(Uri.parse("android.resource://"+reactContext.getPackageName()+"/raw/"+sound),null);
+            }
+            manager.createNotificationChannel(channel1);
+            JPushInterface.setChannel(reactContext,channel);
+        }catch (Throwable throwable){
+        }
+    }
+    @ReactMethod
+    public void setLinkMergeEnable(boolean enable) {
+        JPushInterface.setLinkMergeEnable(reactContext, enable);
+    }
 
+    @ReactMethod
+    public void setSmartPushEnable(boolean enable) {
+        JPushInterface.setSmartPushEnable(reactContext, enable);
+    }
+
+    @ReactMethod
+    public void setGeofenceEnable(boolean enable) {
+        JPushInterface.setGeofenceEnable(reactContext, enable);
+    }
+
+    @ReactMethod
+    public void setCollectControl(ReadableMap readableMap) {
+        if (readableMap == null) {
+            JLogger.w(JConstants.PARAMS_NULL);
+            return;
+        }
+        boolean hadValue = false;
+        JPushCollectControl.Builder builder = new JPushCollectControl.Builder();
+        if (readableMap.hasKey(JConstants.IMEI)) {
+            hadValue = true;
+            builder.imei(readableMap.getBoolean(JConstants.IMEI));
+        }
+        if (readableMap.hasKey(JConstants.IMSI)) {
+            hadValue = true;
+            builder.imsi(readableMap.getBoolean(JConstants.IMSI));
+        }
+        if (readableMap.hasKey(JConstants.MAC)) {
+            hadValue = true;
+            builder.mac(readableMap.getBoolean(JConstants.MAC));
+        }
+        if (readableMap.hasKey(JConstants.WIFI)) {
+            hadValue = true;
+            builder.wifi(readableMap.getBoolean(JConstants.WIFI));
+        }
+        if (readableMap.hasKey(JConstants.BSSID)) {
+            hadValue = true;
+            builder.bssid(readableMap.getBoolean(JConstants.BSSID));
+        }
+        if (readableMap.hasKey(JConstants.SSID)) {
+            hadValue = true;
+            builder.ssid(readableMap.getBoolean(JConstants.SSID));
+        }
+        if (readableMap.hasKey(JConstants.CELL)) {
+            hadValue = true;
+            builder.cell(readableMap.getBoolean(JConstants.CELL));
+        }
+        if (hadValue) {
+            JPushInterface.setCollectControl(reactContext, builder.build());
+        }
+    }
     @ReactMethod
     public void setBadgeNumber(ReadableMap readableMap) {
         if (readableMap == null) {
@@ -112,12 +200,11 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
         }
         if (readableMap.hasKey(JConstants.BADGE_NUMBER)) {
             int number = readableMap.getInt(JConstants.BADGE_NUMBER);
-            JPushInterface.setBadgeNumber(reactContext, number);
+            JPushInterface.setBadgeNumber(reactContext,number);
         } else {
             JLogger.w("there are no " + JConstants.BADGE_NUMBER);
         }
     }
-
     @ReactMethod
     public void setPushTime(ReadableMap readableMap) {
         if (readableMap == null) {
@@ -224,7 +311,48 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
             JLogger.w("there are no " + JConstants.TAGS);
         }
     }
+    @ReactMethod
+    public void setProperties(ReadableMap readableMap) {
+        if (readableMap == null) {
+            JLogger.w(JConstants.PARAMS_NULL);
+            return;
+        }
+        if (readableMap.hasKey(JConstants.PROPERTIES)) {
+            int sequence = readableMap.getInt(JConstants.SEQUENCE);
+            ReadableMap readMap = readableMap.getMap(JConstants.PROPERTIES);
+            ReadableNativeMap map= (ReadableNativeMap) readMap;
+            HashMap properties=map.toHashMap();
+            JPushInterface.setProperties(reactContext,sequence,properties);
+        } else {
+            JLogger.w("there are no " + JConstants.PROPERTIES);
+        }
+    }
+    @ReactMethod
+    public void deleteProperties(ReadableMap readableMap) {
+        if (readableMap == null) {
+            JLogger.w(JConstants.PARAMS_NULL);
+            return;
+        }
+        if (readableMap.hasKey(JConstants.PROPERTIES)) {
+            int sequence = readableMap.getInt(JConstants.SEQUENCE);
+            ReadableMap readMap = readableMap.getMap(JConstants.PROPERTIES);
+            ReadableNativeMap map= (ReadableNativeMap) readMap;
+            HashMap properties=map.toHashMap();
+            JPushInterface.deleteProperties(reactContext,sequence,properties);
+        } else {
+            JLogger.w("there are no " + JConstants.PROPERTIES);
+        }
 
+    }
+    @ReactMethod
+    public void cleanProperties(ReadableMap readableMap) {
+        if (readableMap == null) {
+            JLogger.w(JConstants.PARAMS_NULL);
+            return;
+        }
+        int sequence = readableMap.getInt(JConstants.SEQUENCE);
+        JPushInterface.cleanProperties(reactContext,sequence);
+    }
     @ReactMethod
     public void setTags(ReadableMap readableMap) {
         if (readableMap == null) {
@@ -394,17 +522,22 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
             return;
         }
         String notificationID = readableMap.getString(JConstants.MESSAGE_ID);
-        if (notificationID == null || TextUtils.isEmpty(notificationID)) {
+        if(notificationID==null || TextUtils.isEmpty(notificationID)){
             JLogger.w(JConstants.PARAMS_ILLEGAL);
             return;
         }
         int id = Integer.valueOf(notificationID);
         String notificationTitle = readableMap.hasKey(JConstants.TITLE) ? readableMap.getString(JConstants.TITLE) : reactContext.getPackageName();
         String notificationContent = readableMap.hasKey(JConstants.CONTENT) ? readableMap.getString(JConstants.CONTENT) : reactContext.getPackageName();
+        String broadcastTime = readableMap.hasKey(JConstants.BROADCAST_TIME) ? readableMap.getString(JConstants.BROADCAST_TIME) : "0";
         JPushLocalNotification notification = new JPushLocalNotification();
         notification.setNotificationId(id);
         notification.setTitle(notificationTitle);
         notification.setContent(notificationContent);
+        try {
+            notification.setBroadcastTime(Long.parseLong(broadcastTime));
+        }catch (Throwable throwable){
+        }
         if (readableMap.hasKey(JConstants.EXTRAS)) {
             ReadableMap notificationExtra = readableMap.getMap(JConstants.EXTRAS);
             JSONObject notificationExtraJson = new JSONObject(notificationExtra.toHashMap());
@@ -421,7 +554,7 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
         }
         if (readableMap.hasKey(JConstants.MESSAGE_ID)) {
             String notificationID = readableMap.getString(JConstants.MESSAGE_ID);
-            if (notificationID == null || TextUtils.isEmpty(notificationID)) {
+            if(notificationID==null || TextUtils.isEmpty(notificationID)){
                 JLogger.w(JConstants.PARAMS_ILLEGAL);
                 return;
             }
@@ -485,33 +618,33 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
     }
 
     @ReactMethod
-    public void clearAllNotifications() {
+    public void clearAllNotifications(){
         JPushInterface.clearAllNotifications(reactContext);
     }
 
     @ReactMethod
-    public void clearNotificationById(ReadableMap readableMap) {
-        if (readableMap == null) {
+    public void clearNotificationById(ReadableMap readableMap){
+        if (readableMap == null){
             JLogger.w(JConstants.PARAMS_NULL);
             return;
         }
-        if (readableMap.hasKey(JConstants.NOTIFICATION_ID)) {
+        if (readableMap.hasKey(JConstants.NOTIFICATION_ID)){
             Integer id = readableMap.getInt(JConstants.NOTIFICATION_ID);
-            JPushInterface.clearNotificationById(reactContext, id);
-        } else {
+            JPushInterface.clearNotificationById(reactContext,id);
+        }else {
             JLogger.w("there are no " + JConstants.GEO_FENCE_ID);
         }
     }
 
     @ReactMethod
-    public void setPowerSaveMode(boolean bool) {
-        JPushInterface.setPowerSaveMode(reactContext, bool);
+    public void setPowerSaveMode(boolean bool){
+        JPushInterface.setPowerSaveMode(reactContext,bool);
     }
 
     @ReactMethod
-    public void isNotificationEnabled(Callback callback) {
+    public void isNotificationEnabled(Callback callback){
         Integer isEnabled = JPushInterface.isNotificationEnabled(reactContext);
-        if (callback == null) {
+        if (callback == null){
             JLogger.w(JConstants.CALLBACK_NULL);
             return;
         }
@@ -560,7 +693,6 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
             }
         });
     }
-
     @Override
     public void onHostResume() {
 
