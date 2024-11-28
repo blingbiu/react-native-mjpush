@@ -62,7 +62,7 @@ export default class JPush {
    */
   static init(params: {
     appKey: string;
-    titchannelle: string;
+    channel: string;
     production: boolean;
   }): void;
 
@@ -125,6 +125,16 @@ export default class JPush {
    * 查询别名
    */
   static queryAlias(params: Sequence): void;
+
+   /**
+   * 进入页面
+   */
+  static pageEnterTo(params: String): void;
+
+  /**
+   * 离开页面
+   */
+  static pageLeave(params: String): void;
 
   //***************************************统计***************************************
 
@@ -306,6 +316,42 @@ export default class JPush {
   ): void;
 
   /**
+   * inapp消息事件
+   */
+  static addInappMessageListener(
+    callback: Callback<{
+      /**
+       * 唯一标识inapp消息的 ID
+       */
+      mesageId: string;
+      /**
+       * 标题
+       */
+      title: string;
+      /**
+       * 内容
+       */
+      content: string;
+      /**
+       * 目标页面
+       */
+      target: string[];
+      /**
+       * 跳转地址
+       */
+      clickAction: string;
+      /**
+       * 附加字段
+       */
+      extras: Extra;
+      /**
+       * 类型，inappShow：展示，inappClick：点击
+       */
+      inappEventType: "inappShow" | "inappClick";
+    }>
+  ): void;
+
+  /**
    * tag alias事件
    */
   static addTagAliasListener(
@@ -447,4 +493,27 @@ export default class JPush {
      */
     appBadge: number;
   }): void;
+
+ /**
+   * 设置用户分群推送功能开关
+   *
+   * 
+   * @param {boolean} enable,  YES:开启，NO:关闭，默认是开启。
+   *
+   */
+ static setSmartPushEnable(enable: boolean): void;
+
+/**
+   * 数据采集控制, YES:开启，NO:关闭, 默认开启
+   *
+   */
+ static setCollectControl(params: {
+  cell: boolean;
+  bssid: boolean;
+  imei: boolean;
+  imsi: boolean;
+  mac: boolean;
+  wifi: boolean;
+}): void;
+
 }
