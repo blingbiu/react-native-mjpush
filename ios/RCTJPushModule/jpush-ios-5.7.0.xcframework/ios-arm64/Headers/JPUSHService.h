@@ -9,7 +9,7 @@
  * Copyright (c) 2011 ~ 2017 Shenzhen HXHG. All rights reserved.
  */
 
-#define JPUSH_VERSION_NUMBER 5.4.0
+#define JPUSH_VERSION_NUMBER 5.7.0
 
 #import <Foundation/Foundation.h>
 
@@ -260,6 +260,19 @@ typedef NS_ENUM(NSUInteger, JPAuthorizationStatus) {
 
 
 + (void)registerDeviceToken:(NSData *)deviceToken;
+
+/*!
+ * @abstract 上报liveactivity的启动token
+ *
+ * @param activityAttributes 某liveActivity定义的属性类型
+ * @param pushToStartToken 对应该liveactivity的pushToStartToken，如有更新，请及时调用该方法更新pushToStartToken
+ * @param completion 响应回调
+ * @param seq  请求序列号
+ */
++ (void)registerLiveActivity:(NSString *)activityAttributes
+            pushToStartToken:(nullable NSData *)pushToStartToken
+                  completion:(nullable JPUSHLiveActivityTokenCompletion)completion
+                        seq:(NSInteger)seq;
 
 /*!
  * @abstract 注册liveActivity并上报其pushToken
@@ -784,6 +797,16 @@ typedef NS_ENUM(NSUInteger, JPAuthorizationStatus) {
 + (void)setCollectControl:(JPushCollectControl *)control;
 
 /*!
+ * @abstract 设置心跳时间间隔
+ *
+ * @param interval 心跳时间间隔 单位为秒, 取值范围为[30,290]
+ *
+ * @discussion 请在初始化函数之前调用该接口。
+ *
+ */
++ (void)setHeartBeatTimeInterval:(NSInteger)interval;
+
+/*!
  * @abstract 设置SDK地理位置权限开关
  *
  * @discussion 关闭地理位置之后，SDK地理围栏的相关功能将受到影响，默认是开启。
@@ -806,6 +829,15 @@ typedef NS_ENUM(NSUInteger, JPAuthorizationStatus) {
  *
  */
 + (void)setSmartPushEnable:(BOOL)isEnable;
+
+/*!
+ * @abstract 设置应用数据洞察扩展功能开关
+ *
+ * @param isEnable YES:开启，NO:关闭，默认是开启。
+ *
+ */
++ (void)setDataInsightsEnable:(BOOL)isEnable;
+
 
 /*!
 * @abstract 设置应用内提醒消息的代理
