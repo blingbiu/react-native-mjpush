@@ -76,6 +76,7 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
             JPushHelper.sendEvent(JConstants.NOTIFICATION_EVENT, writableMap);
             JPushModule.notificationMessage = null;
         }
+        JPushInterface.setNotificationCallBackEnable(reactContext,true);
     }
 
     @ReactMethod
@@ -150,6 +151,11 @@ public class JPushModule extends ReactContextBaseJavaModule implements Lifecycle
     @ReactMethod
     public void setGeofenceEnable(boolean enable) {
         JPushInterface.setGeofenceEnable(reactContext, enable);
+    }
+
+    @ReactMethod
+    public void setDataInsightsEnable(boolean enable) {
+        JPushInterface.setDataInsightsEnable(reactContext, enable);
     }
 
     @ReactMethod
