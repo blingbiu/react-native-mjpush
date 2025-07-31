@@ -2,9 +2,9 @@
 
 [![npm version](https://badge.fury.io/js/react-native-mjpush.svg)](https://badge.fury.io/js/react-native-mjpush)
 
-iOS Version: 5.4.0
+iOS Version: 5.7.0
 
-Android Version: 5.5.3
+Android Version: 5.8.0
 
 ## 此项目基于[https://github.com/jpush/jpush-react-native](https://github.com/jpush/jpush-react-native)
 
